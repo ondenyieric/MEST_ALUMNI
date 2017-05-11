@@ -40,10 +40,14 @@ base_world <- base_world_messy + cleanup
 
 base_world
 
+#add your final geom layer
 map_data <- 
   base_world +
   geom_point(data=CLEAN_MEST_DATAFRAME_WITH_LOCATION, 
              aes(x=lon, y=lat), colour="Deep Pink", 
-             fill="Blue",pch=21, size=10, alpha=I(0.7))
-
+             fill="Blue",pch=21, size=5, alpha=I(0.4))
+             
+             
+png("map_data.png", width=1000,height=1000)
 map_data
+dev.off()

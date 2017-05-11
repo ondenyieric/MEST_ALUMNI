@@ -41,19 +41,23 @@ replacePunctuation <- function(x) {
 gsub("[[:punct:]]+", " ", x)
 }
 
-p <- ggplot(CLEAN_MEST_DATAFRAME,aes(x=subline_2)) +  geom_bar()+scale_color_gradientn(colours = rainbow(5))
-p + coord_flip()
-ggsave("MESTALUMNI.png")
+
 #career_corpus_clean <- tm_map(career_corpus_clean, stemDocument)
 
 career_corpus_clean <- tm_map(career_corpus_clean, stripWhitespace)
 
+png("MEST1.png", width=1000,height=1000)
 wordcloud(career_corpus_clean, min.freq = 5, random.order = FALSE, ordered.colors=TRUE)
+dev.off()
 
 pal2 <- brewer.pal(8,"Dark2")
-wordcloud(career_corpus_clean, min.freq = 0, random.order = FALSE, colors=pal2)
 
-png("MEST.png", width=600,height=500)
+
+png("MEST0.png", width=1000,height=1000)
+wordcloud(career_corpus_clean, min.freq = 0, random.order = FALSE, colors=pal2)
+dev.off()
+
+png("MEST.png", width=1000,height=1000)
 wordcloud(career_corpus_clean, min.freq = 0, random.order = FALSE, colors=pal2)
 dev.off()
 
@@ -66,24 +70,25 @@ career_dtm <- DocumentTermMatrix(career_corpus_clean)
 #removePunctuation = TRUE,
 #stemming = FALSE
 #))
-as.data.frame(findFreqTerms(career_dtm, 5)
+FREQ<-as.data.frame(findFreqTerms(career_dtm, 10))
 
+FREQ
 
-dtm <- DocumentTermMatrix(career_corpus_clean, control = list(tokenize = BigramTokenizer, weighting=weightTf))
-freqs <- as.data.frame(inspect(dtm))
-colSums(freqs)
+FREQ1<-as.data.frame(findFreqTerms(career_dtm,7, 1000))
 
-
-
-m <- as.matrix(career_dtm)
-v <- sort(rowSums(m),decreasing=TRUE)
-d <- data.frame(word = names(v),freq=v)
-head(d, 10)
+FREQ1
 
 findAssocs(career_dtm, c("eit", "entrepreneur", "cofounder"), c(0.1, 0.1, 0.1))
 
 p <- ggplot(CLEAN_MEST_DATAFRAME,aes(x=subline_2)) + geom_bar() + theme_minimal()
 ggsave(p)
+
+
+
+
+p <- ggplot(CLEAN_MEST_DATAFRAME,aes(x=subline_2)) +  geom_bar()+scale_color_gradientn(colours = rainbow(5))
+p + coord_flip()
+ggsave("MESTALUMNI.png")
 
 local({
 ## Print result
